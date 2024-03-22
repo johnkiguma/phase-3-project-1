@@ -1,5 +1,3 @@
-# cli.py
-
 import click
 from database import session
 from models import Contact
@@ -9,9 +7,12 @@ def display_menu():
     click.echo("\nWhat would you like to do?\n")
     click.echo("1. Add Contact")
     click.echo("2. Edit Contact")
-    click.echo("3. Delete Contact")
-    click.echo("4. Search Contacts")
-    click.echo("5. Exit")
+    click.echo("3. Display all Contacts")   
+    click.echo("4. Delete Contact")
+    click.echo("5. Search Contacts")
+    click.echo("6. Create User")
+    click.echo("7. Exit")
+    choice = click.prompt("Enter your choice", type=int)
 
 def add_contact():
     name = click.prompt("Enter name")
@@ -33,6 +34,14 @@ def edit_contact():
     else:
         click.echo("Contact not found!")
 
+def display_all_contacts():
+    contacts = session.query(Contact).all()
+    if contacts:
+        for contact in contacts:
+            click.echo(f"Name: {contact.name} Phone: {contact.phone_number}")
+    else:
+        click.echo("No contacts found")
+
 def delete_contact():
     contact_id = click.prompt("Enter contact ID to delete")
     contact = session.query(Contact).filter_by(id=contact_id).first()
@@ -52,24 +61,33 @@ def search_contacts():
     else:
         click.echo("No contacts found")
 
+
+
 @click.command()
 def cli():
     while True:
         display_menu()
-        choice = click.prompt("\nEnter your choice:", type=int)
+        try:
+            choice = click.prompt("\nEnter your choice:", type=int)
 
-        if choice == 1:
-            add_contact()
-        elif choice == 2:
-            edit_contact()
-        elif choice == 3:
-            delete_contact()
-        elif choice == 4:
-            search_contacts()
-        elif choice == 5:
-            click.echo("Exiting...")
-            break
+            if choice == 1:
+                add_contact()
+            elif choice == 2:
+                edit_contact()
+            elif choice == 3:
+                display_all_contacts()
+            elif choice == 4:
+                delete_contact()
+            elif choice == 5:
+                search_contacts()
+            elif choice == 6:
+                click.echo("Exiting...")
+                break
+            else:
+                click.echo("Invalid choice. Please enter a number between 1 and 6.")
+
+        except ValueError:
+            click.echo("Invalid input. Please enter a number.")
 
 if __name__ == "__main__":
     cli()
-    #
