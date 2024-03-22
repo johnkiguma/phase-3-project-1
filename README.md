@@ -1,6 +1,9 @@
 # phase-3-project-1
 # phase-3-project
 
+#project name ADDRESSBOOKMANAGER
+# PROJECT AUTHOR JOHNKIGUMA
+
 # AddressBookManager
 Implementation of an CLI based Address Book Manager.
 
